@@ -1,14 +1,24 @@
 import { ContactItem, ContactNumber, FilterButton } from './Contacts.styled';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
-export const Contacts = ({ id, name, number, onDelete }) => {
+export const Contacts = () => {
+  const contacts = useSelector(state => state.contacts);
+  console.log(contacts);
   return (
-    <ContactItem key={id}>
-      {name}: <ContactNumber href={`tel:${number}`}>{number}</ContactNumber>{' '}
-      <FilterButton type="button" onClick={() => onDelete(id)}>
-        Delete
-      </FilterButton>
-    </ContactItem>
+    <>
+      {contacts.map(contact => {
+        return (
+          <ContactItem key={contact.id}>
+            {contact.name}:{' '}
+            <ContactNumber href={`tel:${contact.number}`}>
+              {contact.number}
+            </ContactNumber>{' '}
+            <FilterButton type="button">Delete</FilterButton>
+          </ContactItem>
+        );
+      })}
+    </>
   );
 };
 
