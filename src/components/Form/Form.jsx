@@ -1,4 +1,6 @@
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import {
@@ -9,11 +11,16 @@ import {
   ErrorText,
   Form,
 } from './Form.styled';
+import { getContacts } from 'redux/selectors';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const nameId = nanoid();
 const numberId = nanoid();
 
-export const ContactForm = ({ onSubmit }) => {
+export const ContactForm = () => {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
   const {
     register,
     resetField,
@@ -27,10 +34,26 @@ export const ContactForm = ({ onSubmit }) => {
     },
   });
 
+  const formSubmitHandler = newContact => {
+    const normalizedName = newContact.name.toLowerCase();
+
+    const checkNewContact = contacts.some(
+      contact => contact.name.toLowerCase() === normalizedName
+    );
+
+    if (checkNewContact) {
+      Notify.info(`${newContact.name} is already in contacts`);
+    } else {
+      dispatch(addContact(newContact));
+
+      Notify.success('Contact successfully added');
+    }
+  };
+
   return (
     <Form
-      onSubmit={handleSubmit(data => {
-        onSubmit(data);
+      onSubmit={handleSubmit(newContact => {
+        formSubmitHandler(newContact);
         resetField('name');
         resetField('number');
       })}
