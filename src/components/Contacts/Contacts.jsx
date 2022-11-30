@@ -42,10 +42,3 @@ export const Contacts = () => {
     </ul>
   );
 };
-
-Contacts.prototype = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  number: PropTypes.number.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};

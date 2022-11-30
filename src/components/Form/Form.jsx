@@ -48,14 +48,14 @@ export const ContactForm = () => {
 
       Notify.success('Contact successfully added');
     }
+    resetField('name');
+    resetField('number');
   };
 
   return (
     <Form
       onSubmit={handleSubmit(newContact => {
         formSubmitHandler(newContact);
-        resetField('name');
-        resetField('number');
       })}
     >
       <FormField>
@@ -97,8 +97,4 @@ export const ContactForm = () => {
       <FormButton type="submit">Add contact</FormButton>
     </Form>
   );
-};
-
-ContactForm.prototype = {
-  onSubmit: PropTypes.string.isRequired,
 };
